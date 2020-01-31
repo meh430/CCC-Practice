@@ -2,6 +2,7 @@ import java.util.*;
 public class CCC14 {
     //PROBLEM 1
     void S1(int size, int [] removeInterval) {
+
         ArrayList<Integer> invites = fillList(10);
         for(int removal : removeInterval) {
             System.out.println("REMOVAL TYPE: " + removal);

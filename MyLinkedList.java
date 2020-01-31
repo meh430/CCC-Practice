@@ -1,7 +1,6 @@
 import java.util.Arrays;
-public class MyLinkedList {
-    LinkedList<String> list = new LinkedList<>();
 
+public class MyLinkedList {
     static class Node {
         String info;
         Node next;
@@ -15,11 +14,11 @@ public class MyLinkedList {
     Node head = null;
 
     void addEnd(Node dataCont) {
-        if(head == null) {
+        if (head == null) {
             head = dataCont;
         } else {
             Node iter = head;
-            while(iter.next != null) {
+            while (iter.next != null) {
                 iter = iter.next;
             }
 
@@ -30,13 +29,13 @@ public class MyLinkedList {
     void printList() {
         Node iter = head;
 
-        while(iter != null) {
+        while (iter != null) {
             System.out.print(iter.info + ", ");
             iter = iter.next;
         }
     }
 
-    public static void main(String[]args) {
+    public static void main(String[] args) {
         MyLinkedList myLinkedList = new MyLinkedList();
 
         myLinkedList.addEnd(new Node("this"));
