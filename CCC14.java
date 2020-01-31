@@ -11,8 +11,7 @@ public class CCC14 {
                 i--;
             }
         }
-
-        System.out.println(invites);
+        System.out.println("1) " + invites);
     }
 
     ArrayList<Integer> fillList(int size) {
@@ -54,11 +53,61 @@ public class CCC14 {
     }
     //PROBLEM 2 end
 
+    //PROBLEM 3
+    boolean S3(int [] cars) {
+        int N = cars.length;
+        Stack<Integer> mountain = new Stack<Integer>();
+        Stack<Integer> branch = new Stack<Integer>();
+        ArrayList<Integer> lake = new ArrayList<>();
+        for(int i = 0; i < N; i++) {
+            mountain.push(cars[i]);
+        }
+        int place = 1;
+        while(true) {
+            if(mountain.isEmpty()) {
+                while(true) {
+                    if(branch.isEmpty()) {
+                        break;
+                    }
+                    lake.add(branch.pop());
+                }
+                break;
+            }
+
+            if(mountain.peek() == place) {
+                lake.add(mountain.pop());
+                place++;
+            } else if(mountain.peek() != place) {
+                if(branch.isEmpty() || branch.peek() != place) {
+                    branch.push(mountain.pop());
+                } else if(branch.peek() == place) {
+                    lake.add(branch.pop());
+                    place++;
+                }
+            }
+
+            System.out.println("Mountain: " + mountain);
+            System.out.println("Branch: " + branch);
+            System.out.println("Lake: " + lake);
+        }
+
+        System.out.println(lake);
+
+        for(int i = 0; i < lake.size(); i++) {
+            if(lake.get(i) != i+1) {
+                return false;
+            }
+        }
+        return lake.size() == N;
+    }
+    //PROBLEM 3 end
+
     public static void main(String[]args) {
         CCC14 problems = new CCC14();
         problems.S1(10, new int [] {2,3});
         System.out.println(
-            problems.S2("Rich Graeme Michelle Sandy Vlado Ron Jacob", "Ron Vlado Sandy Michelle Rich Graeme Jacob")?"good":"bad");
+            problems.S2("Rich Graeme Michelle Sandy Vlado Ron Jacob", "Ron Vlado Sandy Michelle Rich Graeme Jacob")?"2) good":"2) bad");
+        System.out.println(problems.S3(new int [] {2,3,1,4})?"3) Y":"3) N");
     }
 }
 
