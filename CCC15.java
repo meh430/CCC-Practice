@@ -19,10 +19,56 @@ public class CCC15 {
 
         return sum;
     }
+    // PROBLEM 1 end
+
+    // PROBLEM 2
+    int S2(int jerseyStock, char[] availSizes, S2_Helper[] requests) {
+        S2_Helper[] stock = new S2_Helper[jerseyStock];
+        for (int i = 0; i < jerseyStock; i++) {
+            stock[i] = new S2_Helper(availSizes[i], i + 1);
+        }
+        int possible = 0;
+        for (S2_Helper request : requests) {
+            for (S2_Helper store : stock) {
+                if (store.size == 0) {
+                    continue;
+                } else if (request.satisfied(store)) {
+                    possible++;
+                    store.size = 0;
+                }
+            }
+        }
+
+        return possible;
+    }
     // PROBLEM 2 end
 
     public static void main(String[] args) {
         CCC15 problems = new CCC15();
         System.out.println("1) " + problems.S1(new int[] { 1, 3, 5, 4, 0, 0, 7, 0, 0, 6 }));
+        S2_Helper[] playerReq = { new S2_Helper('L', 3), new S2_Helper('S', 3), new S2_Helper('L', 1) };
+        System.out.println("2) " + problems.S2(4, new char[] { 'M', 'S', 'S', 'L' }, playerReq));
+    }
+}
+
+class S2_Helper {
+    // 1-small
+    // 2-medium
+    // 3-large
+    int size, jerseyNum;
+
+    S2_Helper(char chrSize, int num) {
+        this.jerseyNum = num;
+        if (chrSize == 'S') {
+            size = 1;
+        } else if (chrSize == 'M') {
+            size = 2;
+        } else if (chrSize == 'L') {
+            size = 3;
+        }
+    }
+
+    boolean satisfied(S2_Helper other) {
+        return (this.size <= other.size && this.jerseyNum == other.jerseyNum);
     }
 }
