@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class CCC14 {
@@ -56,13 +57,23 @@ public class CCC14 {
     // PROBLEM 2 end
 
     // PROBLEM 3
-    boolean S3(int[] cars) {
-        int N = cars.length;
+    void S3_Driver(ArrayList<ArrayList<Integer>> carTests) {
+        for (ArrayList<Integer> cars : carTests) {
+            if (this.S3(cars)) {
+                System.out.println("Y");
+            } else {
+                System.out.println("N");
+            }
+        }
+    }
+
+    boolean S3(ArrayList<Integer> cars) {
+        int N = cars.size();
         Stack<Integer> mountain = new Stack<Integer>();
         Stack<Integer> branch = new Stack<Integer>();
         ArrayList<Integer> lake = new ArrayList<>();
         for (int i = 0; i < N; i++) {
-            mountain.push(cars[i]);
+            mountain.push(cars.get(i));
         }
         int place = 1;
         while (true) {
@@ -104,14 +115,25 @@ public class CCC14 {
     }
     // PROBLEM 3 end
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         CCC14 problems = new CCC14();
         problems.S1(10, new int[] { 2, 3 });
         System.out.println(
                 problems.S2("Rich Graeme Michelle Sandy Vlado Ron Jacob", "Ron Vlado Sandy Michelle Rich Graeme Jacob")
                         ? "2) good"
                         : "2) bad");
-        System.out.println(problems.S3(new int[] { 2, 3, 1, 4 }) ? "3) Y" : "3) N");
+        int testNums = Integer.parseInt(reader.readLine());
+        ArrayList<ArrayList<Integer>> carTests = new ArrayList<>();
+        for (int i = 0; i < testNums; i++) {
+            int carNum = Integer.parseInt(reader.readLine());
+            ArrayList<Integer> cars = new ArrayList<>();
+            for (int j = 0; j < carNum; j++) {
+                cars.add(Integer.parseInt(reader.readLine()));
+            }
+            carTests.add(cars);
+        }
+        problems.S3_Driver(carTests);
     }
 }
 
