@@ -5,7 +5,7 @@ public class CCC14 {
     // PROBLEM 1
     void S1(int size, int[] removeInterval) {
 
-        ArrayList<Integer> invites = fillList(10);
+        ArrayList<Integer> invites = fillList(size);
         for (int removal : removeInterval) {
             System.out.println("REMOVAL TYPE: " + removal);
             for (int i = removal - 1; i < invites.size(); i += removal) {
