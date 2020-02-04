@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class CCC15 {
@@ -59,12 +62,33 @@ public class CCC15 {
     }
     // PROBLEM 3 end
 
-    public static void main(String[] args) {
+    // PROBLEM 4
+    // thickness, num islands
+    int S4(int K, int N, ArrayList<SeaRoute> routes) {
+        return -1;
+    }
+    // PROBLEM 4 end
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         CCC15 problems = new CCC15();
         System.out.println("1) " + problems.S1(new int[] { 1, 3, 5, 4, 0, 0, 7, 0, 0, 6 }));
         S2_Helper[] playerReq = { new S2_Helper('L', 3), new S2_Helper('S', 3), new S2_Helper('L', 1) };
         System.out.println("2) " + problems.S2(4, new char[] { 'M', 'S', 'S', 'L' }, playerReq));
         System.out.println("3) " + problems.S3(4, new int[] { 2, 2, 3, 3, 4, 4 }));
+
+        String[] S4_line1_data = reader.readLine().trim().split(" ");
+        int K = Integer.parseInt(S4_line1_data[0]);
+        int N = Integer.parseInt(S4_line1_data[1]);
+        int M = Integer.parseInt(S4_line1_data[2]);
+        ArrayList<SeaRoute> routes = new ArrayList<>();
+        for (int i = 0; i < M; i++) {
+            String[] route_data = reader.readLine().trim().split(" ");
+            routes.add(new SeaRoute(Integer.parseInt(route_data[0]), Integer.parseInt(route_data[1]),
+                    Integer.parseInt(route_data[2]), Integer.parseInt(route_data[3])));
+        }
+
+        System.out.println("4) " + problems.S4(K, N, routes));
     }
 }
 
@@ -87,5 +111,16 @@ class S2_Helper {
 
     boolean satisfied(S2_Helper other) {
         return (this.size <= other.size && this.jerseyNum == other.jerseyNum);
+    }
+}
+
+class SeaRoute {
+    int islandA, islandB, time, rocks;
+
+    SeaRoute(int a, int b, int t, int r) {
+        islandA = a;
+        islandB = b;
+        time = t;
+        rocks = r;
     }
 }
