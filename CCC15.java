@@ -43,11 +43,28 @@ public class CCC15 {
     }
     // PROBLEM 2 end
 
+    // PROBLEM 3
+    int S3(int gates, int[] planes) {
+        boolean[] gateState = new boolean[gates];
+        int count = 0;
+        for (int i = 0; i < planes.length; i++) {
+            int planeNum = planes[i];
+            if (!gateState[planeNum - 1]) {
+                gateState[planeNum - 1] = true;
+                count++;
+            }
+        }
+
+        return count;
+    }
+    // PROBLEM 3 end
+
     public static void main(String[] args) {
         CCC15 problems = new CCC15();
         System.out.println("1) " + problems.S1(new int[] { 1, 3, 5, 4, 0, 0, 7, 0, 0, 6 }));
         S2_Helper[] playerReq = { new S2_Helper('L', 3), new S2_Helper('S', 3), new S2_Helper('L', 1) };
         System.out.println("2) " + problems.S2(4, new char[] { 'M', 'S', 'S', 'L' }, playerReq));
+        System.out.println("3) " + problems.S3(4, new int[] { 2, 2, 3, 3, 4, 4 }));
     }
 }
 
