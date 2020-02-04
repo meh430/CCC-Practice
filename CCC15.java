@@ -63,9 +63,16 @@ public class CCC15 {
     // PROBLEM 3 end
 
     // PROBLEM 4
+    /*
+     * get a starter route find another route that is connected when finding other
+     * connected routes, check to see if the destination is also there keep adding
+     * routes to a list have a big list full of possible routes for the inner while
+     * loop trying each starter, the exit condition is finishing a possible
+     * route(gettting to destination)
+     */
     // thickness, num islands
     int S4(int A, int B, int K, int N, ArrayList<SeaRoute> routes) {
-        Stack<SeaRoute> triedRoutes = new Stack<>();
+        ArrayList<Stack<SeaRoute>> possibleRoutes = new ArrayList<>();
         ArrayList<SeaRoute> starts = new ArrayList<>();
         for (SeaRoute route : routes) {
             if (route.isStart(A)) {
@@ -74,10 +81,59 @@ public class CCC15 {
         }
         int tempSum = 0;
         for (SeaRoute start : starts) {
-
+            Stack<SeaRoute> possibleRoute = new Stack<>();
+            int island = start.islandA;
+            possibleRoute.push(start);
+            SeaRoute next = start;
+            while (true) {
+                if (possibleRoute.peek().hasIsland(B)) {
+                    possibleRoutes.add(possibleRoute);
+                    break;
+                }
+                next = findNext(next, island, routes, possibleRoute);
+                if (next == null) {
+                    return -1;
+                }
+                island = next.getOtherDestination(island);
+                possibleRoute.push(next);
+                if (broken(possibleRoute, K)) {
+                    possibleRoute.pop();
+                }
+            }
         }
 
-        return -1;
+        return findMinTime(possibleRoutes);
+    }
+
+    int findMinTime(ArrayList<Stack<SeaRoute>> possibleRoutes) {
+        int min = Integer.MAX_VALUE, sum = 0;
+        for (Stack<SeaRoute> possibleRoute : possibleRoutes) {
+            while (!possibleRoute.empty()) {
+                sum += possibleRoute.pop().time;
+            }
+            min = Math.min(min, sum);
+        }
+
+        return Math.min(min, sum);
+    }
+
+    SeaRoute findNext(SeaRoute route, int from, ArrayList<SeaRoute> routes, Stack<SeaRoute> possibleRoute) {
+        for (SeaRoute possible : routes) {
+            if (possible.hasIsland(from) && route != possible && !possibleRoute.contains(route)) {
+                return possible;
+            }
+        }
+
+        return null;
+    }
+
+    boolean broken(Stack<SeaRoute> stack, int K) {
+        int sum = 0;
+        for (int i = 0; i < stack.size(); i++) {
+            sum += stack.get(i).rocks;
+        }
+
+        return sum >= K;
     }
     // PROBLEM 4 end
 
@@ -136,6 +192,10 @@ class SeaRoute {
         islandB = b;
         time = t;
         rocks = r;
+    }
+
+    int getOtherDestination(int island) {
+        return island == islandA ? islandB : islandA;
     }
 
     boolean isStart(int island) {
