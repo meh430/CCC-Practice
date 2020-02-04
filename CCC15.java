@@ -64,7 +64,19 @@ public class CCC15 {
 
     // PROBLEM 4
     // thickness, num islands
-    int S4(int K, int N, ArrayList<SeaRoute> routes) {
+    int S4(int A, int B, int K, int N, ArrayList<SeaRoute> routes) {
+        Stack<SeaRoute> triedRoutes = new Stack<>();
+        ArrayList<SeaRoute> starts = new ArrayList<>();
+        for (SeaRoute route : routes) {
+            if (route.isStart(A)) {
+                starts.add(route);
+            }
+        }
+        int tempSum = 0;
+        for (SeaRoute start : starts) {
+
+        }
+
         return -1;
     }
     // PROBLEM 4 end
@@ -87,8 +99,10 @@ public class CCC15 {
             routes.add(new SeaRoute(Integer.parseInt(route_data[0]), Integer.parseInt(route_data[1]),
                     Integer.parseInt(route_data[2]), Integer.parseInt(route_data[3])));
         }
+        String[] S4_last_line = reader.readLine().trim().split(" ");
+        int A = Integer.parseInt(S4_last_line[0]), B = Integer.parseInt(S4_last_line[1]);
 
-        System.out.println("4) " + problems.S4(K, N, routes));
+        System.out.println("4) " + problems.S4(A, B, K, N, routes));
     }
 }
 
@@ -122,5 +136,13 @@ class SeaRoute {
         islandB = b;
         time = t;
         rocks = r;
+    }
+
+    boolean isStart(int island) {
+        return island == islandA;
+    }
+
+    boolean hasIsland(int island) {
+        return island == islandA || island == islandB;
     }
 }
