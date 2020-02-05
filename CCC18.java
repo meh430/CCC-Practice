@@ -30,6 +30,8 @@ public class CCC18 {
         for (int i = 0; i < N; i++) {
             villages[i] = Integer.parseInt(reader.readLine().trim());
         }
-        System.out.println("1) " + problems.S1(villages));
+
+        System.out.print("1) ");
+        System.out.printf("%.1f\n", problems.S1(villages));
     }
 }
