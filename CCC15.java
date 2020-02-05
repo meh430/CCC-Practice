@@ -79,7 +79,7 @@ public class CCC15 {
                 starts.add(route);
             }
         }
-        int tempSum = 0;
+
         for (SeaRoute start : starts) {
             Stack<SeaRoute> possibleRoute = new Stack<>();
             int island = start.islandA;
