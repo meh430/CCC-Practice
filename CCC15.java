@@ -63,13 +63,6 @@ public class CCC15 {
     // PROBLEM 3 end
 
     // PROBLEM 4
-    /*
-     * get a starter route find another route that is connected when finding other
-     * connected routes, check to see if the destination is also there keep adding
-     * routes to a list have a big list full of possible routes for the inner while
-     * loop trying each starter, the exit condition is finishing a possible
-     * route(gettting to destination)
-     */
     // thickness, num islands
     int S4(int A, int B, int K, int N, ArrayList<SeaRoute> routes) {
         ArrayList<Stack<SeaRoute>> possibleRoutes = new ArrayList<>();
