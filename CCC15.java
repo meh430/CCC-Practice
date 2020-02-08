@@ -49,12 +49,21 @@ public class CCC15 {
     // PROBLEM 3
     int S3(int gates, int[] planes) {
         boolean[] gateState = new boolean[gates];
+        boolean succ = false;
         int count = 0;
         for (int i = 0; i < planes.length; i++) {
+            succ = false;
             int planeNum = planes[i];
-            if (!gateState[planeNum - 1]) {
-                gateState[planeNum - 1] = true;
-                count++;
+            for (int j = 1; j <= planeNum; j++) {
+                if (!gateState[planeNum - j]) {
+                    gateState[planeNum - j] = true;
+                    succ = true;
+                    count++;
+                    break;
+                }
+            }
+            if (!succ) {
+                return count;
             }
         }
 
