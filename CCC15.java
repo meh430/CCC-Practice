@@ -66,7 +66,6 @@ public class CCC15 {
                 return count;
             }
         }
-
         return count;
     }
     // PROBLEM 3 end

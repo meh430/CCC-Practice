@@ -1,42 +1,53 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    // PROBLEM 3
-    int S3(int gates, int[] planes) {
-        boolean[] gateState = new boolean[gates];
-        boolean succ = false;
+    int S2(int W, int[] trains) {
         int count = 0;
-        for (int i = 0; i < planes.length; i++) {
-            succ = false;
-            int planeNum = planes[i];
-            for (int j = 1; j <= planeNum; j++) {
-                if (!gateState[planeNum - j]) {
-                    gateState[planeNum - j] = true;
-                    succ = true;
-                    count++;
-                    break;
-                }
+
+        Queue<Integer> trainQ = new LinkedList<>();
+        for (int i = 0; i < trains.length; i++) {
+            if (addAll(trainQ) > W) {
+                trainQ.poll();
+                break;
             }
-            if (!succ) {
-                return count;
+
+            if (trainQ.size() >= 4) {
+                trainQ.poll();
+                count++;
             }
+
+            trainQ.add(trains[i]);
+        }
+
+        while (!trainQ.isEmpty()) {
+            trainQ.poll();
+            count++;
         }
 
         return count;
     }
-    // PROBLEM 3 end
+
+    int addAll(Queue<Integer> trainQ) {
+        int sum = 0;
+        Iterator<Integer> trainI = trainQ.iterator();
+        while (trainI.hasNext()) {
+            sum += trainI.next();
+        }
+
+        return sum;
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int gates = Integer.parseInt(reader.readLine().trim());
-        int P = Integer.parseInt(reader.readLine().trim());
-        int[] planes = new int[P];
-        for (int i = 0; i < P; i++) {
-            planes[i] = Integer.parseInt(reader.readLine().trim());
+        Main problem = new Main();
+        int W = Integer.parseInt(reader.readLine().trim());
+        int N = Integer.parseInt(reader.readLine().trim());
+        int[] trains = new int[N];
+        for (int i = 0; i < N; i++) {
+            trains[i] = Integer.parseInt(reader.readLine().trim());
         }
-        System.out.println(new Main().S3(gates, planes));
+        reader.close();
+        System.out.println(problem.S2(W, trains));
     }
-
 }
