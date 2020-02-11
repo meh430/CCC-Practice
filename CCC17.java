@@ -6,21 +6,16 @@ public class CCC17 {
         int[] swiftScores = stringToInt(swifts.trim().split(" "));
         int[] semaphScores = stringToInt(semaph.trim().split(" "));
         int N = swiftScores.length;
-        for (int i = N - 1; i >= 0; i--) {
-            if (addAll(swiftScores, i) == addAll(semaphScores, i)) {
-                return i + 1;
+        int swiftsT = 0, semT = 0, k = 0;
+        for (int i = 0; i < N; i++) {
+            swiftsT += swiftScores[i];
+            semT += semaphScores[i];
+            if (swiftsT == semT) {
+                k = i + 1;
             }
         }
 
-        return 0;
-    }
-
-    int addAll(int[] arr, int end) {
-        int sum = 0;
-        for (int i = 0; i <= end; i++) {
-            sum += arr[i];
-        }
-        return sum;
+        return k;
     }
 
     int[] stringToInt(String[] arr) {

@@ -26,6 +26,7 @@ public class Temp {
             if (grid[curr.row][curr.col] == 'S') {
                 return curr.distance;
             } else if (!cameraPosition(curr.row, curr.col, cameraSpaces)) {
+                visited[curr.row][curr.col] = true;
                 bfs.addAll(getNeigbors(curr, grid, visited, grid[curr.row][curr.col] == '.', cameraSpaces));
             }
         }
@@ -41,28 +42,24 @@ public class Temp {
                 && inBounds(position.row + 1, position.col, grid) && grid[position.row + 1][position.col] != 'C'
                 && !cameraPosition(position.row + 1, position.col, cameraSpaces)) {
             ret.add(new Position(position.row + 1, position.col, position.distance + add));
-            visited[position.row + 1][position.col] = true;
         }
 
         if (!visited[position.row - 1][position.col] && inBounds(position.row - 1, position.col, grid)
                 && grid[position.row - 1][position.col] != 'W' && grid[position.row - 1][position.col] != 'C'
                 && !cameraPosition(position.row - 1, position.col, cameraSpaces)) {
             ret.add(new Position(position.row - 1, position.col, position.distance + add));
-            visited[position.row - 1][position.col] = true;
         }
 
         if (!visited[position.row][position.col + 1] && inBounds(position.row, position.col + 1, grid)
                 && grid[position.row][position.col + 1] != 'W' && grid[position.row][position.col + 1] != 'C'
                 && !cameraPosition(position.row, position.col + 1, cameraSpaces)) {
             ret.add(new Position(position.row, position.col + 1, position.distance + add));
-            visited[position.row][position.col + 1] = true;
         }
 
         if (!visited[position.row][position.col - 1] && inBounds(position.row, position.col - 1, grid)
                 && grid[position.row][position.col - 1] != 'W' && grid[position.row][position.col - 1] != 'C'
                 && !cameraPosition(position.row, position.col - 1, cameraSpaces)) {
             ret.add(new Position(position.row, position.col - 1, position.distance + add));
-            visited[position.row][position.col - 1] = true;
         }
 
         return ret;

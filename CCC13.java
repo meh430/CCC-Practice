@@ -36,9 +36,9 @@ public class CCC13 {
             if (trainQ.size() >= 4) {
                 trainQ.poll();
                 count++;
-            } else {
-                trainQ.add(trains[i]);
             }
+
+            trainQ.add(trains[i]);
         }
 
         while (!trainQ.isEmpty()) {

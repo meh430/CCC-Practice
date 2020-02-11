@@ -1,7 +1,42 @@
-import java.io.*;
 import java.util.*;
 
-public class Main {
+public class CCC2020 {
+    int J1(int n) {
+        if (n == 1 || n == 10 || n == 9) {
+            return 1;
+        } else if (n == 2 || n == 3 || n == 7 || n == 8) {
+            return 2;
+        } else if (n == 4 || n == 5 || n == 6) {
+            return 3;
+        }
+
+        return 0;
+    }
+
+    int S1(String swifts, String semaph) {
+        int[] swiftScores = stringToInt(swifts.trim().split(" "));
+        int[] semaphScores = stringToInt(semaph.trim().split(" "));
+        int N = swiftScores.length;
+        int swiftsT = 0, semT = 0, day = 0;
+        for (int i = 0; i < N; i++) {
+            swiftsT += swiftScores[i];
+            semT += semaphScores[i];
+            if (swiftsT == semT) {
+                day = i + 1;
+            }
+        }
+
+        return day;
+    }
+
+    int[] stringToInt(String[] arr) {
+        int[] ret = new int[arr.length];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = Integer.parseInt(arr[i]);
+        }
+        return ret;
+    }
+
     int S3(int[] Rs, int N) {
         LinkedList<Division> divisions = new LinkedList<>();
         Arrays.sort(Rs);
@@ -39,6 +74,7 @@ public class Main {
                 sameCount = i + 1;
             }
         }
+
         LinkedList<Division> ret = new LinkedList<>();
         if (sameCount == divisions.size() - 1) {
             Collections.sort(divisions, new Comparator<Division>() {
@@ -88,17 +124,6 @@ public class Main {
         }
 
         return 0;
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(reader.readLine().trim());
-        int[] Rs = new int[N];
-        for (int i = 0; i < N; i++) {
-            Rs[i] = Integer.parseInt(reader.readLine().trim());
-        }
-
-        System.out.println(new Main().S3(Rs, N));
     }
 }
 
