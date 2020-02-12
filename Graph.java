@@ -9,7 +9,11 @@ public class Graph {
     LinkedList<AdjacencyList> graphList = new LinkedList<>();
 
     // 1 - vertex you want to add to
-    // value that should be connected to that vertex
+    // 2 -value that should be connected to that vertex
+    // if bidirectional, that value as vertex will have the vertex as a value
+    // so 1 -> 2 and 2 -> 1 would be connected bidirectionally
+    // but if we add 1 -> 2 and its unidirectional, than 2 -> will not have 1 bc you
+    // cannot travel back
     public void addEdge(int vertex, int value) {
         // check to see if the vertex exists
         AdjacencyList vertexAList = null, valueAList = null;
@@ -31,20 +35,27 @@ public class Graph {
         // if the vertex does not exist, create a new one
         if (vertexAList == null) {
             vertexAList = new AdjacencyList(vertex);
+            // add the vertex to the graph
             graphList.add(vertexAList);
         }
 
         // if the value does not exist, create a new vertex for that value
         if (valueAList == null) {
             valueAList = new AdjacencyList(value);
+            // add the value as a vertex to the graph
             graphList.add(valueAList);
         }
+
+        // Since it is bidirectional, add the vertex to the value adj list. If it was
+        // not, dont
+        // this is bc adding vertex to value adj list makes it so that you can travel
+        // from the value to the vertex
+        // and the vertex to the value. Linking it both ways makes it bidirectional
 
         // add the value to the vertex adjacency list
         vertexAList.aList.add(value);
         // add the vertex to the value adjacency list
         valueAList.aList.add(vertex);
-
     }
 
     public int getMaxVertex() {
@@ -64,6 +75,7 @@ public class Graph {
     public void dfs(boolean[] visited, int vertex) {
         System.out.print(vertex + " -> ");
         visited[vertex] = true;
+        // find the adj list with the inputted vertex
         AdjacencyList temp = null;
         for (AdjacencyList adjList : graphList) {
             if (adjList.vertexValue == vertex) {
@@ -71,7 +83,9 @@ public class Graph {
             }
         }
 
+        // iterate through the adj values of the found vertex
         for (Integer v : temp.aList) {
+            // if not visited an adj value, go there
             if (!visited[v]) {
                 dfs(visited, v);
             }
@@ -88,15 +102,17 @@ public class Graph {
         while (!queue.isEmpty()) {
             next = queue.poll();
             System.out.print(next + " -> ");
-            visited[next] = true;
             AdjacencyList temp = null;
+            // find next vertex alist
             for (AdjacencyList adjList : graphList) {
                 if (adjList.vertexValue == next) {
                     temp = adjList;
                 }
             }
 
+            // iterate through adjacent vertices of vertex
             for (Integer i : temp.aList) {
+                // if not fisited, add it to the queue
                 if (!visited[i]) {
                     visited[i] = true;
                     queue.add(i);
