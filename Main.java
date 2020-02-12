@@ -2,116 +2,129 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    int S3(int[] Rs, int N) {
-        LinkedList<Division> divisions = new LinkedList<>();
-        Arrays.sort(Rs);
-        int holder = 0;
-        for (int i = 0; i < N; i++) {
-            if (i + 1 >= N) {
-                if (Rs[i] - Rs[i - 1] != 0) {
-                    divisions.add(new Division(Rs[i], 1));
-                } else {
-                    divisions.add(new Division(Rs[i], (i + 1) - holder));
-                }
-                break;
-            }
-            if (Rs[i + 1] - Rs[i] != 0) {
-                divisions.add(new Division(Rs[i], (i + 1) - holder));
-                holder = i + 1;
+    LinkedList<AdjacencyList> graphList = new LinkedList<>();
+    int vertices;
+
+    public int getMaxVertex() {
+        return vertices;
+    }
+
+    // single direction so do not add the vertex to the value's adj list
+    public void addEdge(int vertex, int value) {
+        AdjacencyList vertexList = null, valueList = null;
+        for (AdjacencyList aList : graphList) {
+            if (aList.vertexVal == vertex) {
+                vertexList = aList;
             }
         }
 
-        Collections.sort(divisions, new Comparator<Division>() {
-            @Override
-            public int compare(Division o1, Division o2) {
-                if (o2.count - o1.count == 0) {
-                    return o2.value - o1.value;
+        for (AdjacencyList aList : graphList) {
+            if (aList.vertexVal == value) {
+                valueList = aList;
+            }
+        }
+
+        if (vertexList == null) {
+            vertexList = new AdjacencyList(vertex);
+            graphList.add(vertexList);
+        }
+
+        if (valueList == null) {
+            valueList = new AdjacencyList(value);
+            graphList.add(valueList);
+        }
+
+        vertexList.adjList.add(value);
+    }
+
+    public int possible(int start, int dest) {
+        boolean[] visited = new boolean[getMaxVertex() + 1];
+        return dfs(start, dest, visited, false);
+    }
+
+    public int dfs(int start, int dest, boolean[] visited, boolean hasChild) {
+        hasChild = false;
+        if (start == dest) {
+            return 1;
+        }
+
+        visited[start] = true;
+
+        AdjacencyList temp = null;
+        for (AdjacencyList a : graphList) {
+            if (a.vertexVal == start) {
+                temp = a;
+                break;
+            }
+        }
+
+        if (temp.adjList.size() != 0) {
+            hasChild = true;
+        }
+
+        for (Integer i : temp.adjList) {
+            if (!visited[i]) {
+                return dfs(i, dest, visited, hasChild);
+            }
+        }
+
+        if (!hasChild) {
+            for (AdjacencyList aList : graphList) {
+                if (aList.adjList.contains(start) && aList.vertexVal == dest && !visited[aList.vertexVal]) {
+                    return 0;
                 }
-                return o2.count - o1.count;
+            }
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    public void printGraph() {
+        Collections.sort(graphList, new Comparator<AdjacencyList>() {
+            public int compare(AdjacencyList o1, AdjacencyList o2) {
+                return o1.vertexVal - o2.vertexVal;
             }
         });
-        int sameCount = 0;
-        for (int i = 0; i < divisions.size() - 1; i++) {
-            if (divisions.get(i).count - divisions.get(i + 1).count != 0) {
-                sameCount = i;
-                break;
-            } else if (i + 1 >= divisions.size() - 1) {
-                sameCount = i + 1;
-            }
+        for (AdjacencyList adjList : graphList) {
+            System.out.print("Vertex: " + adjList.vertexVal + " | ");
+            System.out.println(adjList.adjList);
         }
-        LinkedList<Division> ret = new LinkedList<>();
-        if (sameCount == divisions.size() - 1) {
-            Collections.sort(divisions, new Comparator<Division>() {
-                public int compare(Division o1, Division o2) {
-                    return o2.value - o1.value;
-                }
-            });
-
-            return Math.abs(divisions.get(divisions.size() - 1).value - divisions.get(0).value);
-        } else if (sameCount + 1 >= 2) {
-            for (int i = 0; i < sameCount + 1; i++) {
-                ret.add(new Division(divisions.get(i).value, divisions.get(i).count));
-            }
-            Collections.sort(ret, new Comparator<Division>() {
-                public int compare(Division o1, Division o2) {
-                    return o2.value - o1.value;
-                }
-            });
-            return Math.abs(ret.get(ret.size() - 1).value - ret.get(0).value);
-        } else if (sameCount + 1 == 1) {
-            int index = 0;
-            int highFreq = divisions.get(0).value;
-            for (int i = 1; i < divisions.size() - 1; i++) {
-                if (divisions.get(i).count - divisions.get(i + 1).count != 0) {
-                    index = i;
-                    break;
-                } else if (i + 1 >= divisions.size() - 1) {
-                    index = i;
-                }
-            }
-
-            for (int i = 1; i < index + 1; i++) {
-                ret.add(new Division(divisions.get(i).value, divisions.get(i).count));
-            }
-
-            Collections.sort(ret, new Comparator<Division>() {
-                public int compare(Division o1, Division o2) {
-                    return o1.value - o2.value;
-                }
-            });
-
-            if (highFreq < ret.get(0).value) {
-                return Math.abs(highFreq - ret.get(ret.size() - 1).value);
-            } else {
-                return Math.abs(highFreq - ret.get(0).value);
-            }
-        }
-
-        return 0;
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(reader.readLine().trim());
-        int[] Rs = new int[N];
-        for (int i = 0; i < N; i++) {
-            Rs[i] = Integer.parseInt(reader.readLine().trim());
+        Main graph = new Main();
+        String[] first_line = reader.readLine().trim().split(" ");
+        graph.vertices = Integer.parseInt(first_line[0]);
+        int M = Integer.parseInt(first_line[1]);
+        for (int i = 0; i < M; i++) {
+            String[] line = reader.readLine().trim().split(" ");
+            graph.addEdge(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
         }
-
-        System.out.println(new Main().S3(Rs, N));
+        String[] possible = reader.readLine().trim().split(" ");
+        int res = graph.possible(Integer.parseInt(possible[0]), Integer.parseInt(possible[1]));
+        if (res == -1) {
+            System.out.println("no");
+        } else if (res == 0) {
+            System.out.println("unknown");
+        } else {
+            System.out.println("yes");
+        }
+        // graph.addEdge(3, 8);
+        // graph.addEdge(2, 8);
+        // graph.addEdge(3, 4);
+        // graph.printGraph();
+        // System.out.println(graph.possible(3, 2));
     }
 }
 
-class Division {
-    int value, count;
+class AdjacencyList {
+    int vertexVal;
+    LinkedList<Integer> adjList;
 
-    Division(int value, int c) {
-        this.value = value;
-        this.count = c;
-    }
-
-    @Override
-    public String toString() {
-        return "(" + value + ", " + count + ")";
+    AdjacencyList(int val) {
+        adjList = new LinkedList<>();
+        vertexVal = val;
     }
 }
